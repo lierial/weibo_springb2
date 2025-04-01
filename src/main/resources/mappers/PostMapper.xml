@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhang.weibo.mapper.PostMapper">
+
+    <insert id="insertPost">
+        insert into posts(id,user_id,tag,content,images,likes,comments,shares,created)
+        values(#{id},#{userId},#{tag},#{content},#{images},#{likes},#{comments},#{shares},#{created})
+    </insert>
+
+    <select id="getPostById" resultType="com.zhang.weibo.entity.Post">
+        select * from posts where id = #{id}
+    </select>
+
+    <select id="getPostsByUserId" resultType="com.zhang.weibo.entity.Post">
+        select * from posts where user_id = #{uid}
+    </select>
+
+    <select id="getTopPosts" resultType="com.zhang.weibo.entity.Post">
+        select * from posts order by likes limit 10
+    </select>
+
+</mapper>
