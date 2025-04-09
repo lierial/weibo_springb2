@@ -10,7 +10,7 @@ Weibo_springb2是[Weibo_Flutter](https://github.com/lierial/weibo_flutter)的后
 
 后端的数据借由**Python**的**Faker**库实现
 
-其代码在[Python文件夹](https://github.com/lierial/weibo_springb2/tree/main/src/python)下
+其代码在[Python文件夹](https://github.com/lierial/weibo_springb2/tree/main/python)下
 
 ### 后端表结构
 
