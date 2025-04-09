@@ -17,10 +17,34 @@
 
     <select id="getUserById" resultType="com.zhang.weibo.entity.User">
         SELECT `id`, `name`, `bio`, `avatar`, `created`, `account`, `password`,
-            (SELECT COUNT(follower_id) FROM follows WHERE follower_id = #{id}) as `follows`,
-            (SELECT COUNT(id) FROM posts WHERE user_id = #{id}) as `posts`,
-            (SELECT COUNT(followee_id) FROM follows WHERE followee_id = #{id}) as `fans`
+            (SELECT COUNT(followerId) FROM follows WHERE followerId = #{id}) as `follows`,
+            (SELECT COUNT(id) FROM posts WHERE userId = #{id}) as `posts`,
+            (SELECT COUNT(followeeId) FROM follows WHERE followeeId = #{id}) as `fans`
         FROM users
         WHERE id = #{id}
     </select>
+
+    <select id="getFollowersByUser" resultType="com.zhang.weibo.entity.User">
+        SELECT u.id, u.name, `bio`, `avatar`, u.created, `account`, '*******' as `password`,
+         (u.id IN (SELECT followeeId FROM follows WHERE followerId = #{uid})) as followed
+        FROM users as u JOIN follows as f ON u.id = f.followeeId
+        WHERE f.followerId = #{uid}
+    </select>
+
+    <select id="getFolloweesByUser" resultType="com.zhang.weibo.entity.User">
+        SELECT u.id, u.name, `bio`, `avatar`, u.created, `account`, '*******' as `password`,
+        (u.id IN (SELECT followeeId FROM follows WHERE followerId = #{uid})) as followed
+        FROM users as u JOIN follows as f ON u.id = f.followerId
+        WHERE f.followeeId = #{uid}
+    </select>
+
+    <insert id="followUser">
+        INSERT INTO follows (`followerId`, `followeeId`, `created`)
+        VALUES (#{uid}, #{fid},#{time});
+    </insert>
+
+    <delete id="disFollowUser">
+        DELETE FROM follows
+        WHERE followerId = #{uid} AND followeeId = #{fid}
+    </delete>
 </mapper>

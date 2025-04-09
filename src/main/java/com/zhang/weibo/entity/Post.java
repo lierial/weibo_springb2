@@ -1,5 +1,6 @@
 package com.zhang.weibo.entity;
 
+//暂时不选择使用DTO
 public class Post {
 
     Integer Id;
@@ -9,8 +10,13 @@ public class Post {
     String Images;
     Integer Likes;
     Integer Comments;
-    Integer Shares;
     String Created;
+    String UserName;
+    String Avatar;
+
+    //先不使用DTO，直接加到实体类里
+    Boolean isFollowed;
+    Boolean isLiked;
 
     public Post() {
     }
@@ -22,7 +28,6 @@ public class Post {
         Images = images;
         Likes = 0;
         Comments = 0;
-        Shares = 0;
     }
 
     public Integer getId() {
@@ -81,13 +86,6 @@ public class Post {
         Comments = comments;
     }
 
-    public Integer getShares() {
-        return Shares;
-    }
-
-    public void setShares(Integer shares) {
-        Shares = shares;
-    }
 
     public String getCreated() {
         return Created;
@@ -95,6 +93,38 @@ public class Post {
 
     public void setCreated(String created) {
         Created = created;
+    }
+
+    public String getUserName() {
+        return UserName;
+    }
+
+    public void setUserName(String userName) {
+        UserName = userName;
+    }
+
+    public String getAvatar() {
+        return Avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        Avatar = avatar;
+    }
+
+    public Boolean getFollowed() {
+        return isFollowed;
+    }
+
+    public void setFollowed(Boolean followed) {
+        isFollowed = followed;
+    }
+
+    public Boolean getLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(Boolean liked) {
+        isLiked = liked;
     }
 
     @Override
@@ -107,8 +137,11 @@ public class Post {
                 ", Images='" + Images + '\'' +
                 ", Likes=" + Likes +
                 ", Comments=" + Comments +
-                ", Shares=" + Shares +
                 ", Created='" + Created + '\'' +
+                ", UserName='" + UserName + '\'' +
+                ", Avatar='" + Avatar + '\'' +
+                ", isFollowed=" + isFollowed +
+                ", isLiked=" + isLiked +
                 '}';
     }
 }

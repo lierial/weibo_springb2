@@ -39,4 +39,23 @@ public class UserService {
         }
         return results;
     }
+
+    public Results getFollowersByUser(Integer uid){
+        return new Results(userMapper.getFollowersByUser(uid));
+    }
+
+    public Results getFolloweesByUser(Integer uid){
+        return new Results(userMapper.getFolloweesByUser(uid));
+    }
+
+    public Results followUser(Integer uid,Integer fid){
+        int row = userMapper.followUser(uid,fid,LocalDateTime.now().toString());
+        return new Results(row > 0);
+    }
+
+    public Results disFollowUser(Integer uid,Integer fid){
+        int row = userMapper.disFollowUser(uid,fid);
+        return new Results(row>0);
+    }
+
 }

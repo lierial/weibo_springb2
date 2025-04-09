@@ -40,4 +40,30 @@ public class UserController {
         User user = new User(name,acc,psd);
         return userService.insertUser(user);
     }
+
+    @GetMapping("/follower/{id}")
+    public Results getFollowersByUser(@PathVariable Integer id){
+        return userService.getFollowersByUser(id);
+    }
+
+    @GetMapping("/followee/{id}")
+    public Results getFolloweesByUser(@PathVariable Integer id){
+        return userService.getFolloweesByUser(id);
+    }
+
+    @PostMapping("/follow/add")
+    public Results followUser(
+            @RequestParam("uid") Integer uid,
+            @RequestParam("fid") Integer fid
+    ){
+        return userService.followUser(uid,fid);
+    }
+
+    @PostMapping("/follow/delete")
+    public Results disFollowUser(
+            @RequestParam("uid") Integer uid,
+            @RequestParam("fid") Integer fid
+    ){
+        return userService.disFollowUser(uid,fid);
+    }
 }

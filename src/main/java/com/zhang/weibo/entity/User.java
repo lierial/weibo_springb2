@@ -1,5 +1,9 @@
 package com.zhang.weibo.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+//暂时不选择使用DTO
 public class User {
     private Integer Id;
     private String Name;
@@ -12,6 +16,8 @@ public class User {
     private Integer follows = 0;
     private Integer posts = 0;
     private Integer fans = 0;
+
+    private Boolean followed = false;
 
     public User(){}
 
@@ -103,6 +109,14 @@ public class User {
         this.fans = fans;
     }
 
+    public Boolean getFollowed() {
+        return followed;
+    }
+
+    public void setFollowed(Boolean followed) {
+        this.followed = followed;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -116,6 +130,7 @@ public class User {
                 ", follows=" + follows +
                 ", posts=" + posts +
                 ", fans=" + fans +
+                ", followed=" + followed +
                 '}';
     }
 }

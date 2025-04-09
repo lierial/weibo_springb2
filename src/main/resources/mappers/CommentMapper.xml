@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhang.weibo.mapper.CommentMapper">
+
+    <select id="getAllComment" resultType="com.zhang.weibo.entity.Comment">
+        SELECT c.id,userId,postId,parentId,content,likes,c.created,u.name as userName,u.avatar
+        FROM comments as c JOIN users as u ON c.userId = u.id
+        WHERE postId = #{pid}
+        ORDER BY likes DESC
+    </select>
+
+    <insert id="addComment">
+        INSERT INTO comments(`userId`, `postId`, `parentId`, `content`, `likes`, `created`)
+        VALUES (#{uid}, #{pid}, 0, #{content}, 0, #{time});
+    </insert>
+
+</mapper>

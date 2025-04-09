@@ -2,21 +2,58 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhang.weibo.mapper.PostMapper">
 
-    <insert id="insertPost">
-        insert into posts(id,user_id,tag,content,images,likes,comments,shares,created)
-        values(#{id},#{userId},#{tag},#{content},#{images},#{likes},#{comments},#{shares},#{created})
+    <select id="getFollowsPosts" resultType="com.zhang.weibo.entity.Post">
+        SELECT p.id,tag,content,images,p.created,userId,u.name as userName,u.avatar,
+            (SELECT COUNT(id) FROM likes WHERE postId = p.id) as likes,
+            (SELECT COUNT(id) FROM comments WHERE postId = p.id) as comments,
+            (SELECT p.userId in (SELECT followeeId FROM follows WHERE followerId = #{uid})) as isFollowed,
+            (SELECT p.id in (SELECT postId FROM likes WHERE userId = #{uid})) as isLiked
+        FROM posts as p JOIN users as u ON p.userId = u.id
+        WHERE userId IN (SELECT followeeId FROM follows WHERE followerId = #{uid})
+        ORDER BY created DESC LIMIT #{page},10
+    </select>
+
+    <insert id="addPost">
+        INSERT INTO `weibo`.`posts` (`userId`, `tag`, `content`, `images`,`created`)
+        VALUES (#{userId}, #{tag}, #{content}, #{images}, #{created});
     </insert>
 
-    <select id="getPostById" resultType="com.zhang.weibo.entity.Post">
-        select * from posts where id = #{id}
+    <select id="searchPosts" resultType="com.zhang.weibo.entity.Post">
+        SELECT p.id,tag,content,images,p.created,userId,u.name as userName,u.avatar,
+               (SELECT COUNT(id) FROM likes WHERE postId = p.id) as likes,
+               (SELECT COUNT(id) FROM comments WHERE postId = p.id) as comments,
+               (SELECT p.userId in (SELECT followeeId FROM follows WHERE followerId = #{uid})) as isFollowed,
+               (SELECT p.id in (SELECT postId FROM likes WHERE userId = #{uid})) as isLiked
+        FROM posts as p JOIN users as u ON p.userId = u.id
+        WHERE content like #{text}
     </select>
 
-    <select id="getPostsByUserId" resultType="com.zhang.weibo.entity.Post">
-        select * from posts where user_id = #{uid}
+    <insert id="likePost">
+        INSERT INTO likes (`userId`, `postId`, `created`) VALUES (#{uid}, #{pid}, #{time});
+    </insert>
+
+    <delete id="likeDelete">
+        DELETE FROM likes WHERE userId = #{uid} AND postId = #{pid}
+    </delete>
+
+    <select id="recommendPosts" resultType="com.zhang.weibo.entity.Post">
+        SELECT p.id,tag,content,images,p.created,userId,u.name as userName,u.avatar,
+               (SELECT COUNT(id) FROM likes WHERE postId = p.id) as likes,
+               (SELECT COUNT(id) FROM comments WHERE postId = p.id) as comments,
+               (SELECT p.userId in (SELECT followeeId FROM follows WHERE followerId = #{uid})) as isFollowed,
+               (SELECT p.id in (SELECT postId FROM likes WHERE userId = #{uid})) as isLiked
+        FROM posts as p JOIN users as u ON p.userId = u.id
+        ORDER BY likes DESC LIMIT 10
     </select>
 
-    <select id="getTopPosts" resultType="com.zhang.weibo.entity.Post">
-        select * from posts order by likes limit 10
+    <select id="getPostsByUser" resultType="com.zhang.weibo.entity.Post">
+        SELECT p.id,tag,content,images,p.created,userId,u.name as userName,u.avatar,
+               (SELECT COUNT(id) FROM likes WHERE postId = p.id) as likes,
+               (SELECT COUNT(id) FROM comments WHERE postId = p.id) as comments,
+               (SELECT p.userId in (SELECT followeeId FROM follows WHERE followerId = #{uid})) as isFollowed,
+               (SELECT p.id in (SELECT postId FROM likes WHERE userId = #{uid})) as isLiked
+        FROM posts as p JOIN users as u ON p.userId = u.id
+        WHERE p.userId = #{uid}
+        ORDER BY p.created DESC
     </select>
-
 </mapper>
